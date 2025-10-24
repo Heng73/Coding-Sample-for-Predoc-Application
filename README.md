@@ -1,6 +1,6 @@
 # Coding Sample for Predoc Application
 
-This repository contains selected coding samples that demonstrate my proficiency in **Stata**, **R**, and **Python**.  
+This repository contains selected coding samples that demonstrate my proficiency in **Stata**, **R**, **Python**, and **Matlab**.  
 The included scripts come from real research workflows and are intended to showcase my ability to work with data cleaning, analysis, and automation across multiple programming environments.
 
 ## Repository Contents
@@ -13,6 +13,13 @@ The included scripts come from real research workflows and are intended to showc
 
 - **`Python_MonitorID_Wind_matching.py`**  
   Python script illustrating data processing and geospatial nearest-neighbor matching using `pandas`, `numpy`, and `scikit-learn`.
+
+- **`Matlab_DynamicProgramming.m`**
+  MATLAB implementation of several dynamic programming problems:
+  Task 1: Discrete-state DDP for nonrenewable resource extraction using value function iteration with deterministic transitions.
+  Task 2: Smoother policies via interpolation (sqrt-spaced action grid + linear interpolation of transitions and policy).
+  Task 3: FOC-based analytical policy paths; solves for the scarcity rent μ0 to match cumulative production.
+  Task 4: Real options / optimal stopping drilling problem with a price Markov chain built from normal shocks (via normcdf); solves for the trigger price and plots the resulting value function.
 
 ## Purpose
 
