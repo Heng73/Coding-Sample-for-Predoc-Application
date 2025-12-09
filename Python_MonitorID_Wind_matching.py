@@ -1,14 +1,52 @@
+# ==================================================
+# Purpose of this script
+# --------------------------------------------------
+# This script links air-quality monitors to the nearest
+# wind-measurement stations using great-circle distances.
+#
+# why we do this:
+#   - In a separate step of the project, we have already matched
+#     firms to air-quality monitors based on geographic distance.
+#   - For water emissions, "upstream" and "downstream" are relatively
+#     well-defined along the river network. For air emissions, however,
+#     the direction of transport is much less obvious because wind
+#     varies over time and across locations.
+#   - To capture this dimension, we match each air-quality monitor to
+#     its nearest wind station and use the prevailing wind direction
+#     (e.g., the most frequent direction over a year) at that station
+#     as a proxy for how pollution is likely transported around the monitor.
+#   - These wind-based measures will be used in robustness checks.
+#
+# Output:
+#   1. monitor_List_Opendate_Wind_data.csv
+#        - full monitor list matched to nearest wind station
+#   2. monitor_List(china)_Opendate_Wind_data.csv
+#        - another documented monitor list matched to nearest wind station
+# ==================================================
+
+from pathlib import Path
 import pandas as pd
 import numpy as np
 from sklearn.neighbors import BallTree
 
 # -------------------- Paths --------------------
-china_monitor_file     = '/Users/tangheng/Dropbox/Green TFP China/RA_Heng_work/Data/Monitor/Workdata/monitor_List(china)_Opendate_data.csv'
-monitor_file           = '/Users/tangheng/Dropbox/Green TFP China/RA_Heng_work/Data/Monitor/monitor_station_list_withOpendate.csv'
-station_file           = '/Users/tangheng/Dropbox/Green TFP China/Data/Workdata/Workdata for wind process/processed_monitor_wind_data.csv'
-station_filtered_file  = '/Users/tangheng/Dropbox/Green TFP China/RA_Heng_work/Data/Monitor/Workdata/processed_monitor_wind_data_filtered.csv'
-output_file            = '/Users/tangheng/Dropbox/Green TFP China/RA_Heng_work/Data/Monitor/monitor_List_Opendate_Wind_data.csv'
-output2_file           = '/Users/tangheng/Dropbox/Green TFP China/RA_Heng_work/Data/Monitor/monitor_List(china)_Opendate_Wind_data.csv'
+THIS_FILE = Path(__file__).resolve()
+# /Users/tangheng/Dropbox/Green TFP China/RA_Heng_work/Code/this_script.py
+PROJECT_ROOT = THIS_FILE.parents[2]
+# /Users/tangheng/Dropbox/Green TFP China
+
+DATA_DIR          = PROJECT_ROOT / "Data"
+RA_DIR            = PROJECT_ROOT / "RA_Heng_work"
+MONITOR_DIR       = RA_DIR / "Data" / "Monitor"
+MONITOR_WORK_DIR  = MONITOR_DIR / "Workdata"
+WIND_DATA_DIR     = DATA_DIR / "Workdata" / "Workdata for wind process"
+
+china_monitor_file    = MONITOR_WORK_DIR / "monitor_List(china)_Opendate_data.csv"
+monitor_file          = MONITOR_DIR      / "monitor_station_list_withOpendate.csv"
+station_file          = WIND_DATA_DIR    / "processed_monitor_wind_data.csv"
+station_filtered_file = MONITOR_WORK_DIR / "processed_monitor_wind_data_filtered.csv"
+output_file           = MONITOR_DIR      / "monitor_List_Opendate_Wind_data.csv"
+output2_file          = MONITOR_DIR      / "monitor_List(china)_Opendate_Wind_data.csv"
 
 EARTH_RADIUS_KM = 6371.0
 
